@@ -55,18 +55,21 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle;
         TextView tvOverview;
+        TextView tvReleaseDate;
         ImageView ivPoster;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvOverview = itemView.findViewById(R.id.tvOverview);
+            tvReleaseDate = itemView.findViewById(R.id.tvReleaseDate);
             ivPoster = itemView.findViewById(R.id.ivPoster);
         }
 
         public void bind(Movie movie) {
             tvTitle.setText(movie.getTitle());
             tvOverview.setText(movie.getOverview());
+            tvReleaseDate.setText(String.format("Released: %s", movie.getReleaseDate()));
             String imageUrl;
             if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 imageUrl = movie.getBackdropPath();
