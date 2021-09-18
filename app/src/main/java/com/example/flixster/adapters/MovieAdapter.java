@@ -2,8 +2,6 @@ package com.example.flixster.adapters;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,21 +10,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.graphics.drawable.WrappedDrawable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.example.flixster.R;
 import com.example.flixster.models.Movie;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
     Context context;
     List<Movie> movies;
+    public static final String TAG = "MovieAdapter";
 
     public MovieAdapter(Context context, List<Movie> movies) {
         this.context = context;
@@ -36,14 +36,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Log.d("MovieAdapter", "onCreateViewHolder");
+        Log.d(TAG, "onCreateViewHolder");
         View movieView = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
         return new ViewHolder(movieView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Log.d("MovieAdapter", "onBindViewHolder " + position);
+        Log.d(TAG, "onBindViewHolder " + position);
         Movie movie = movies.get(position);
         holder.bind(movie);
     }
@@ -70,7 +70,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         public void bind(Movie movie) {
             tvTitle.setText(movie.getTitle());
             tvOverview.setText(movie.getOverview());
-            tvReleaseDate.setText(String.format("Released: %s", movie.getReleaseDate()));
+            try {
+                Date releaseDate = new SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(movie.getReleaseDate());
+                if (releaseDate != null) {
+                    tvReleaseDate.setText(String.format("Released: %s", new SimpleDateFormat("MM/dd/yy", Locale.US).format(releaseDate)));
+                }
+            }
+            catch (ParseException e) {
+                Log.e(TAG, "Hit parse exception", e);
+                e.printStackTrace();
+            }
             String imageUrl;
             if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 imageUrl = movie.getBackdropPath();
