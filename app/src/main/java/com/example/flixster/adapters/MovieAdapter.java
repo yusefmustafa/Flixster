@@ -18,7 +18,11 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.example.flixster.DetailActivity;
 import com.example.flixster.MainActivity;
 import com.example.flixster.R;
@@ -99,7 +103,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             } else {
                 imageUrl = movie.getPosterPath();
             }
-            Glide.with(context).load(imageUrl).placeholder(R.drawable.ic_baseline_local_movies).circleCrop().transform(new RoundedCorners(50)).into(ivPoster);
+            Glide.with(context).load(imageUrl).placeholder(R.drawable.ic_baseline_local_movies).transform(new CenterCrop(), new RoundedCorners(20)).into(ivPoster);
 
             container.setOnClickListener(new View.OnClickListener() {
                 @Override
